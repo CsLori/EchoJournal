@@ -1,4 +1,4 @@
-package com.cslori.echojournal.core.presentation.designsystem.text_fields
+package com.cslori.echojournal.core.presentation.designsystem.textfields
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.BasicTextField
