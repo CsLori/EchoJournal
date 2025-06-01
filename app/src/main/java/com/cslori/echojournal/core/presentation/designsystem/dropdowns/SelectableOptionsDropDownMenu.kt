@@ -1,4 +1,4 @@
-package com.cslori.echojournal.core.presentation.design_system.dropdowns
+package com.cslori.echojournal.core.presentation.designsystem.dropdowns
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -32,8 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import com.cslori.echojournal.core.presentation.design_system.dropdowns.Selectable.Companion.asUnselectedItems
-import com.cslori.echojournal.core.presentation.design_system.theme.EchoJournalTheme
+import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTheme
 
 @Composable
 fun <T> SelectableOptionsDropDownMenu(

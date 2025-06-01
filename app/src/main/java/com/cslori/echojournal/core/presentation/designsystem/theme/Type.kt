@@ -1,4 +1,4 @@
-package com.cslori.echojournal.core.presentation.design_system.theme
+package com.cslori.echojournal.core.presentation.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

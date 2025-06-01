@@ -1,4 +1,4 @@
-package com.cslori.echojournal.core.presentation.design_system.dropdowns
+package com.cslori.echojournal.core.presentation.designsystem.dropdowns
 
 data class SelectableOptionExtras(
     val text: String,

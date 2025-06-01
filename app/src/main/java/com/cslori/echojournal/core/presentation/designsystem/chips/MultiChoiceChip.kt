@@ -1,4 +1,4 @@
-package com.cslori.echojournal.core.presentation.design_system.chips
+package com.cslori.echojournal.core.presentation.designsystem.chips
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cslori.echojournal.R
-import com.cslori.echojournal.core.presentation.design_system.theme.EchoJournalTheme
+import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTheme
 
 @Composable
 fun MultiChoiceChip(

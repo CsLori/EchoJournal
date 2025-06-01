@@ -1,4 +1,4 @@
-package com.cslori.echojournal.core.presentation.design_system.chips
+package com.cslori.echojournal.core.presentation.designsystem.chips
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,8 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.cslori.echojournal.core.presentation.design_system.theme.EchoJournalTheme
-import com.cslori.echojournal.core.presentation.design_system.theme.Gray6
+import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTheme
+import com.cslori.echojournal.core.presentation.designsystem.theme.Gray6
 
 @Composable
 fun HashTagChip(
