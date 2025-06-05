@@ -1,14 +1,20 @@
 package com.cslori.echojournal.core.util
 
+import android.content.Context
+import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.ui.res.stringResource
+
 @Stable
 sealed interface UiText {
-    data class Dynamic(val value: String): UiText
+    data class Dynamic(val value: String) : UiText
 
     @Stable
     data class StringResource(
         @StringRes val id: Int,
         val args: Array<Any> = arrayOf()
-    ): UiText {
+    ) : UiText {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false
@@ -30,9 +36,16 @@ sealed interface UiText {
 
     @Composable
     fun asString(): String {
-        return when(this) {
+        return when (this) {
             is Dynamic -> value
             is StringResource -> stringResource(id, *args)
+        }
+    }
+
+    fun asString(context: Context): String {
+        return when (this) {
+            is Dynamic -> value
+            is StringResource -> context.getString(id, *args)
         }
     }
 }
