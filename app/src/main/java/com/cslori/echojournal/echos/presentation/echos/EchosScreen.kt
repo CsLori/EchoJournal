@@ -16,6 +16,7 @@ import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTh
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cslori.echojournal.core.presentation.designsystem.theme.bgGradient
 import com.cslori.echojournal.echos.presentation.echos.components.EchoRecordFab
 import com.cslori.echojournal.echos.presentation.echos.components.EchosEmptyBackground
@@ -25,8 +26,10 @@ import com.cslori.echojournal.echos.presentation.echos.components.FilterRow
 
 @Composable
 fun EchosRoot(
-    viewModel: EchosViewModel = koinViewModel()
+    viewModel: EchosViewModel = viewModel()
+//            viewModel: EchosViewModel = koinViewModel()
 ) {
+
     val state by viewModel.state.collectAsStateWithLifecycle()
     EchosScreen(
         state = state,

@@ -108,7 +108,6 @@ class EchosViewModel : ViewModel() {
         combine(
             selectedMoodFilters,
             selectedTopicFilters
-
         ) { selectedMoods, selectedTopics ->
             _state.update {
                 it.copy(
