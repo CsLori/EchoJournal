@@ -28,6 +28,7 @@ class EchosViewModel : ViewModel() {
     val state = _state
         .onStart {
             if (!hasLoadedInitialData) {
+                observeFilters()
                 hasLoadedInitialData = true
             }
         }.stateIn(
@@ -38,14 +39,34 @@ class EchosViewModel : ViewModel() {
 
     fun onAction(action: EchosAction) {
         when (action) {
-            EchosAction.OnFabClick -> {}
-            EchosAction.OnFabLongClick -> {}
-            EchosAction.OnMoodChipClick -> {}
-            is EchosAction.OnRemoveFilters -> {}
-            EchosAction.OnTopicChipClick -> {}
-            EchosAction.OnSettingsClick -> {}
-            EchosAction.OnDismissTopicDropdown,
-            EchosAction.OnDismissMoodDropdown -> {
+            EchosAction.FabClick -> {}
+            EchosAction.FabLongClick -> {}
+            EchosAction.MoodChipClick -> {
+                _state.update {
+                    it.copy(
+                        selectedEchoFilterChip = EchoFilterChip.MOODS
+                    )
+                }
+            }
+
+            is EchosAction.RemoveFilters -> {
+                when (action.filterType) {
+                    EchoFilterChip.MOODS -> selectedMoodFilters.update { emptyList() }
+                    EchoFilterChip.TOPICS -> selectedTopicFilters.update { emptyList() }
+                }
+            }
+
+            EchosAction.TopicChipClick -> {
+                _state.update {
+                    it.copy(
+                        selectedEchoFilterChip = EchoFilterChip.TOPICS
+                    )
+                }
+            }
+
+            EchosAction.SettingsClick -> {}
+            EchosAction.DismissTopicDropdown,
+            EchosAction.DismissMoodDropdown -> {
                 _state.update {
                     it.copy(
                         selectedEchoFilterChip = null
@@ -53,19 +74,32 @@ class EchosViewModel : ViewModel() {
                 }
             }
 
-            is EchosAction.OnFilterByMood -> {
-                selectedMoodFilters.update { it + action.moodUi }
-                _state.value = _state.value.copy(
-                    selectedEchoFilterChip = EchoFilterChip.MOODS
-                )
+            is EchosAction.FilterByMood -> {
+                toggleMoodFilter(action.moodUi)
             }
 
-            is EchosAction.OnFilterByTopic -> {
-                _state.update {
-                    it.copy(
-                        selectedEchoFilterChip = EchoFilterChip.MOODS
-                    )
-                }
+            is EchosAction.FilterByTopic -> {
+                toggleTopicFilter(action.topic)
+            }
+        }
+    }
+
+    private fun toggleMoodFilter(moodUi: MoodUi) {
+        selectedMoodFilters.update { selectedMoods ->
+            if (moodUi in selectedMoods) {
+                selectedMoods - moodUi
+            } else {
+                selectedMoods + moodUi
+            }
+        }
+    }
+
+    private fun toggleTopicFilter(topic: String) {
+        selectedTopicFilters.update { selectedTopics ->
+            if (topic in selectedTopics) {
+                selectedTopics - topic
+            } else {
+                selectedTopics + topic
             }
         }
     }
@@ -124,14 +158,22 @@ class EchosViewModel : ViewModel() {
 
             2 -> MoodChipContent(
                 iconsRes = icons,
-                title = UiText.Dynamic("${moodNames.first()} + ${moodNames[1]}")
+                title = UiText.Combined(
+                    format =
+                        "%s, %s",
+                    uiTexts = moodNames.toTypedArray()
+                )
             )
 
             else -> {
-                val extraElement = size - 2
+                val extraElementCount = size - 2
                 MoodChipContent(
                     iconsRes = icons,
-                    title = UiText.Dynamic("${moodNames.first()}, ${moodNames[1]} +$extraElement")
+                    title = UiText.Combined(
+                        format =
+                            "%s, %s +$extraElementCount",
+                        uiTexts = moodNames.take(2).toTypedArray()
+                    )
                 )
             }
         }

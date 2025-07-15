@@ -17,7 +17,5 @@ data class EchosState(
     val topics: List<Selectable<String>> = listOf("Love", "Happy", "Work").asUnselectedItems(),
     val moodChipContent: MoodChipContent = MoodChipContent(),
     val selectedEchoFilterChip: EchoFilterChip? = null,
-    val topicChipTitle: UiText = UiText.StringResource(R.string.all_topics),
-
-
-    )
+    val topicChipTitle: UiText = UiText.StringResource(R.string.all_topics)
+)

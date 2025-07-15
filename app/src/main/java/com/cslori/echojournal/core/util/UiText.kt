@@ -33,12 +33,45 @@ sealed interface UiText {
             return result
         }
     }
+    @Stable
+    data class Combined(
+        val format: String,
+        val uiTexts: Array<UiText>
+    ): UiText {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Combined
+
+            if (format != other.format) return false
+            if (!uiTexts.contentEquals(other.uiTexts)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = format.hashCode()
+            result = 31 * result + uiTexts.contentHashCode()
+            return result
+        }
+    }
 
     @Composable
     fun asString(): String {
         return when (this) {
             is Dynamic -> value
             is StringResource -> stringResource(id, *args)
+            is Combined -> {
+                val strings = uiTexts.map  {uiText ->
+                    when (uiText) {
+                        is Dynamic -> uiText.value
+                        is StringResource -> stringResource(uiText.id, *uiText.args)
+                        is Combined ->IllegalArgumentException("Cannot nest Combined UiTexts")
+                    }
+                }
+                String.format(format, *strings.toTypedArray())
+            }
         }
     }
 
@@ -46,6 +79,16 @@ sealed interface UiText {
         return when (this) {
             is Dynamic -> value
             is StringResource -> context.getString(id, *args)
+            is Combined -> {
+                val strings = uiTexts.map  {uiText ->
+                    when (uiText) {
+                        is Dynamic -> uiText.value
+                        is StringResource -> context.getString(uiText.id, *uiText.args)
+                        is Combined ->IllegalArgumentException("Cannot nest Combined UiTexts")
+                    }
+                }
+                String.format(format, *strings.toTypedArray())
+            }
         }
     }
 }

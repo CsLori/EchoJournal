@@ -41,11 +41,11 @@ private fun EchosScreen(
 ) {
     Scaffold(
         topBar = {
-            EchosTopBar(onSettingsClick = { onAction(EchosAction.OnSettingsClick) })
+            EchosTopBar(onSettingsClick = { onAction(EchosAction.SettingsClick) })
         },
         floatingActionButton = {
             EchoRecordFab(
-                onClick = { onAction(EchosAction.OnFabClick) }
+                onClick = { onAction(EchosAction.FabClick) }
             )
         }
     ) { innerPadding ->

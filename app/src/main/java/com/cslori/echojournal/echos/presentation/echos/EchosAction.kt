@@ -4,14 +4,14 @@ import com.cslori.echojournal.echos.presentation.echos.models.EchoFilterChip
 import com.cslori.echojournal.echos.presentation.models.MoodUi
 
 sealed interface EchosAction {
-    data object OnMoodChipClick : EchosAction
-    data object OnDismissMoodDropdown : EchosAction
-    data class OnFilterByMood(val moodUi: MoodUi) : EchosAction
-    data object OnTopicChipClick : EchosAction
-    data object OnDismissTopicDropdown : EchosAction
-    data class OnFilterByTopic(val topic: String) : EchosAction
-    data object OnFabClick : EchosAction
-    data object OnFabLongClick : EchosAction
-    data object OnSettingsClick : EchosAction
-    data class OnRemoveFilters(val filterType: EchoFilterChip) : EchosAction
+    data object MoodChipClick : EchosAction
+    data object DismissMoodDropdown : EchosAction
+    data class FilterByMood(val moodUi: MoodUi) : EchosAction
+    data object TopicChipClick : EchosAction
+    data object DismissTopicDropdown : EchosAction
+    data class FilterByTopic(val topic: String) : EchosAction
+    data object FabClick : EchosAction
+    data object FabLongClick : EchosAction
+    data object SettingsClick : EchosAction
+    data class RemoveFilters(val filterType: EchoFilterChip) : EchosAction
 }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,8 +46,6 @@ fun FilterRow(
 ) {
     val context = LocalContext.current
 
-    var isExpanded by remember { mutableStateOf(false) }
-
     var dropDownOffset by remember { mutableStateOf(IntOffset.Zero) }
 
     val configuration = LocalConfiguration.current
@@ -72,20 +69,19 @@ fun FilterRow(
             text = moodChipContent.title.asString(),
             modifier = modifier,
             onClick = {
-                onAction(EchosAction.OnMoodChipClick)
-                isExpanded = true
+                onAction(EchosAction.MoodChipClick)
             },
             isClearVisible = hasActiveMoodFilters,
-            onClearButtonClick = { onAction(EchosAction.OnRemoveFilters(EchoFilterChip.MOODS)) },
+            onClearButtonClick = { onAction(EchosAction.RemoveFilters(EchoFilterChip.MOODS)) },
             isHighlighted = hasActiveMoodFilters || selectedEchoFilterChip == EchoFilterChip.MOODS,
             isDropDownVisible = selectedEchoFilterChip == EchoFilterChip.MOODS,
             dropDownMenu = {
                 SelectableOptionsDropDownMenu(
                     items = moods,
                     itemDisplayText = { moodUi -> moodUi.title.asString(context) },
-                    onItemClick = { moodUi -> onAction(EchosAction.OnFilterByMood(moodUi.item)) },
-                    onDismiss = { onAction(EchosAction.OnDismissMoodDropdown) },
-                    key = { moodUi -> moodUi.title },
+                    onItemClick = { moodUi -> onAction(EchosAction.FilterByMood(moodUi.item)) },
+                    onDismiss = { onAction(EchosAction.DismissMoodDropdown) },
+                    key = { moodUi -> moodUi.title.asString(context) },
                     leadingIcon = { moodUi ->
                         Image(
                             imageVector = ImageVector.vectorResource(moodUi.iconSet.fill),
@@ -95,7 +91,6 @@ fun FilterRow(
                     },
                     dropDownOffset = dropDownOffset,
                     maxDropDownHeight = maxDropDownHeight,
-                    dropDownExtras = TODO()
                 )
             },
             leadingContent = {
@@ -108,8 +103,6 @@ fun FilterRow(
                             Image(
                                 imageVector = ImageVector.vectorResource(iconRes),
                                 contentDescription = moodChipContent.title.asString(),
-                                modifier = Modifier
-                                    .height(16.dp)
                             )
                         }
                     }
@@ -121,11 +114,10 @@ fun FilterRow(
             text = topicChipTitle.asString(),
             modifier = modifier,
             onClick = {
-                onAction(EchosAction.OnTopicChipClick)
-                isExpanded = true
+                onAction(EchosAction.TopicChipClick)
             },
             isClearVisible = hasActiveTopicFilters,
-            onClearButtonClick = { onAction(EchosAction.OnRemoveFilters(EchoFilterChip.TOPICS)) },
+            onClearButtonClick = { onAction(EchosAction.RemoveFilters(EchoFilterChip.TOPICS)) },
             isHighlighted = hasActiveTopicFilters || selectedEchoFilterChip == EchoFilterChip.TOPICS,
             isDropDownVisible = selectedEchoFilterChip == EchoFilterChip.TOPICS,
             dropDownMenu = {
@@ -139,7 +131,7 @@ fun FilterRow(
                         ),
                         itemDisplayText = { it },
                         onItemClick = {},
-                        onDismiss = { onAction(EchosAction.OnDismissTopicDropdown) },
+                        onDismiss = { onAction(EchosAction.DismissTopicDropdown) },
                         key = { it },
                         dropDownOffset = dropDownOffset,
                         maxDropDownHeight = maxDropDownHeight,
@@ -148,8 +140,8 @@ fun FilterRow(
                     SelectableOptionsDropDownMenu(
                         items = topics,
                         itemDisplayText = { topic -> topic },
-                        onItemClick = { topic -> onAction(EchosAction.OnFilterByTopic(topic.item)) },
-                        onDismiss = { onAction(EchosAction.OnDismissTopicDropdown) },
+                        onItemClick = { topic -> onAction(EchosAction.FilterByTopic(topic.item)) },
+                        onDismiss = { onAction(EchosAction.DismissTopicDropdown) },
                         key = { topic -> topic },
                         leadingIcon = { topic ->
                             Image(
