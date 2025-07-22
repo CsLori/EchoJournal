@@ -22,7 +22,7 @@ import com.cslori.echojournal.core.util.defaultShadow
 import com.cslori.echojournal.echos.presentation.components.MoodPlayer
 import com.cslori.echojournal.echos.presentation.models.EchoUi
 import com.cslori.echojournal.echos.presentation.models.MoodUi
-import com.cslori.echojournal.echos.presentation.models.TrackSizeInfo
+import com.cslori.echojournal.echos.presentation.echos.models.TrackSizeInfo
 import com.cslori.echojournal.echos.presentation.preview.PreviewModels
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -37,7 +37,7 @@ fun EchoCard(
     Surface(
         shape = RoundedCornerShape(8.dp),
         color = MaterialTheme.colorScheme.surface,
-        modifier = Modifier
+        modifier = modifier
             .defaultShadow(shape = RoundedCornerShape(8.dp))
     ) {
         Column(

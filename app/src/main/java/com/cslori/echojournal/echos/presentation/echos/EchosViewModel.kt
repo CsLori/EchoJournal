@@ -6,7 +6,7 @@ import com.cslori.echojournal.R
 import com.cslori.echojournal.core.presentation.designsystem.dropdowns.Selectable
 import com.cslori.echojournal.core.util.UiText
 import com.cslori.echojournal.echos.presentation.echos.models.EchoFilterChip
-import com.cslori.echojournal.echos.presentation.models.MoodChipContent
+import com.cslori.echojournal.echos.presentation.echos.models.MoodChipContent
 import com.cslori.echojournal.echos.presentation.models.MoodUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -81,6 +81,10 @@ class EchosViewModel : ViewModel() {
             is EchosAction.FilterByTopic -> {
                 toggleTopicFilter(action.topic)
             }
+
+            EchosAction.PauseClick -> TODO()
+            is EchosAction.PlayEchoClick -> TODO()
+            is EchosAction.TrackSizeAvailable -> TODO()
         }
     }
 

@@ -13,11 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTheme
-import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cslori.echojournal.core.presentation.designsystem.theme.bgGradient
+import com.cslori.echojournal.echos.presentation.echos.components.EchoList
 import com.cslori.echojournal.echos.presentation.echos.components.EchoRecordFab
 import com.cslori.echojournal.echos.presentation.echos.components.EchosEmptyBackground
 import com.cslori.echojournal.echos.presentation.echos.components.EchosTopBar
@@ -89,6 +89,24 @@ private fun EchosScreen(
                             .fillMaxWidth()
                     )
                 }
+
+                else -> {
+                    EchoList(
+                        sections = state.echoDaySections,
+                        onPlayClick = { echoId ->
+                            onAction(EchosAction.PlayEchoClick(echoId))
+                        },
+                        onPauseClick = {
+                            onAction(EchosAction.PauseClick)
+                        },
+                        onTrackSizeAvailable = { trackSize ->
+                            onAction(EchosAction.TrackSizeAvailable(trackSize))
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                    )
+                }
             }
         }
     }
@@ -100,6 +118,7 @@ private fun EchosScreenPreview() {
     EchoJournalTheme {
         EchosScreen(
             state = EchosState(
+                echos = emptyMap(),
                 isLoading = false,
                 hasEchosRecorded = false
             ),

@@ -29,7 +29,7 @@ import com.cslori.echojournal.core.presentation.designsystem.dropdowns.Selectabl
 import com.cslori.echojournal.core.util.UiText
 import com.cslori.echojournal.echos.presentation.echos.EchosAction
 import com.cslori.echojournal.echos.presentation.echos.models.EchoFilterChip
-import com.cslori.echojournal.echos.presentation.models.MoodChipContent
+import com.cslori.echojournal.echos.presentation.echos.models.MoodChipContent
 import com.cslori.echojournal.echos.presentation.models.MoodUi
 
 @Composable

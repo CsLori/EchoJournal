@@ -1,4 +1,4 @@
-package com.cslori.echojournal.echos.presentation.models
+package com.cslori.echojournal.echos.presentation.echos.models
 
 import com.cslori.echojournal.R
 import com.cslori.echojournal.core.util.UiText

@@ -1,4 +1,4 @@
-package com.cslori.echojournal.echos.presentation.models
+package com.cslori.echojournal.echos.presentation.echos.models
 
 enum class RelativePosition {
     FIRST,

@@ -22,8 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTheme
 import com.cslori.echojournal.echos.presentation.models.EchoUi
-import com.cslori.echojournal.echos.presentation.models.RelativePosition
-import com.cslori.echojournal.echos.presentation.models.TrackSizeInfo
+import com.cslori.echojournal.echos.presentation.echos.models.RelativePosition
+import com.cslori.echojournal.echos.presentation.echos.models.TrackSizeInfo
 import com.cslori.echojournal.echos.presentation.preview.PreviewModels
 
 private val noVerticalLineAboveIconModifier = Modifier.padding(top = 16.dp)

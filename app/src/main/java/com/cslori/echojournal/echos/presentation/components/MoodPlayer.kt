@@ -25,7 +25,7 @@ import com.cslori.echojournal.core.presentation.designsystem.theme.MoodPrimary80
 import com.cslori.echojournal.core.util.formatMMSS
 import com.cslori.echojournal.echos.presentation.echos.models.PlayBackState
 import com.cslori.echojournal.echos.presentation.models.MoodUi
-import com.cslori.echojournal.echos.presentation.models.TrackSizeInfo
+import com.cslori.echojournal.echos.presentation.echos.models.TrackSizeInfo
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
