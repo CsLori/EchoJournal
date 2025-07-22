@@ -25,6 +25,7 @@ import com.cslori.echojournal.core.presentation.designsystem.theme.MoodPrimary80
 import com.cslori.echojournal.core.util.formatMMSS
 import com.cslori.echojournal.echos.presentation.echos.models.PlayBackState
 import com.cslori.echojournal.echos.presentation.models.MoodUi
+import com.cslori.echojournal.echos.presentation.models.TrackSizeInfo
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -39,6 +40,7 @@ fun MoodPlayer(
     powerRatios: List<Float>,
     onPlayClick: () -> Unit,
     onPauseClick: () -> Unit,
+    onTrackSizeAvailable: (TrackSizeInfo) -> Unit,
     modifier: Modifier = Modifier,
     amplitudeBarWidth: Dp = 5.dp,
     amplitudeBarSpacing: Dp = 4.dp
@@ -128,7 +130,8 @@ private fun MoodPlayerPreview() {
             powerRatios = ratios,
             onPlayClick = {},
             onPauseClick = {},
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            onTrackSizeAvailable = {}
         )
     }
 }
