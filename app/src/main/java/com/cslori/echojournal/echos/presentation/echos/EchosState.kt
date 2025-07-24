@@ -4,6 +4,7 @@ import com.cslori.echojournal.R
 import com.cslori.echojournal.core.presentation.designsystem.dropdowns.Selectable
 import com.cslori.echojournal.core.presentation.designsystem.dropdowns.Selectable.Companion.asUnselectedItems
 import com.cslori.echojournal.core.util.UiText
+import com.cslori.echojournal.echos.presentation.echos.models.AudioCaptureMethod
 import com.cslori.echojournal.echos.presentation.echos.models.DaySection
 import com.cslori.echojournal.echos.presentation.echos.models.EchoFilterChip
 import com.cslori.echojournal.echos.presentation.echos.models.MoodChipContent
@@ -12,6 +13,7 @@ import com.cslori.echojournal.echos.presentation.models.MoodUi
 
 data class EchosState(
     val echos: Map<UiText, List<EchoUi>> = emptyMap(),
+    val currentCaptureMethod: AudioCaptureMethod? = null,
     val hasEchosRecorded: Boolean = false,
     val hasActiveTopicFilters: Boolean = false,
     val hasActiveMoodFilters: Boolean = false,

@@ -18,5 +18,6 @@ sealed interface EchosAction {
     data class PlayEchoClick(val echoId: Int) : EchosAction
     data object PauseClick : EchosAction
     data class TrackSizeAvailable(val trackSize: TrackSizeInfo) : EchosAction
+    data object AudioPermissionGranted : EchosAction
 
 }

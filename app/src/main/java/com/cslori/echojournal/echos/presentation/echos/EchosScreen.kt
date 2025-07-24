@@ -1,5 +1,8 @@
 package com.cslori.echojournal.echos.presentation.echos
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,11 +20,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cslori.echojournal.core.presentation.designsystem.theme.bgGradient
+import com.cslori.echojournal.core.util.ObserveAsEvents
+import com.cslori.echojournal.echos.presentation.EchosEvent
 import com.cslori.echojournal.echos.presentation.echos.components.EchoList
 import com.cslori.echojournal.echos.presentation.echos.components.EchoRecordFab
 import com.cslori.echojournal.echos.presentation.echos.components.EchosEmptyBackground
 import com.cslori.echojournal.echos.presentation.echos.components.EchosTopBar
 import com.cslori.echojournal.echos.presentation.echos.components.FilterRow
+import com.cslori.echojournal.echos.presentation.echos.models.AudioCaptureMethod
 
 
 @Composable
@@ -31,6 +37,24 @@ fun EchosRoot(
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val hasRecordAudioPermission = permissions[Manifest.permission.RECORD_AUDIO] == true
+        if (hasRecordAudioPermission && state.currentCaptureMethod == AudioCaptureMethod.STANDARD) {
+            viewModel.onAction(EchosAction.AudioPermissionGranted)
+        }
+    }
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            EchosEvent.RequestAudioPermission -> {
+                permissionLauncher.launch(arrayOf(Manifest.permission.RECORD_AUDIO))
+            }
+        }
+    }
+
     EchosScreen(
         state = state,
         onAction = viewModel::onAction
