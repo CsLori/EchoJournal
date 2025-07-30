@@ -13,12 +13,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTheme
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cslori.echojournal.core.presentation.designsystem.theme.bgGradient
 import com.cslori.echojournal.core.util.ObserveAsEvents
 import com.cslori.echojournal.echos.presentation.EchosEvent
@@ -28,12 +27,12 @@ import com.cslori.echojournal.echos.presentation.echos.components.EchosEmptyBack
 import com.cslori.echojournal.echos.presentation.echos.components.EchosTopBar
 import com.cslori.echojournal.echos.presentation.echos.components.FilterRow
 import com.cslori.echojournal.echos.presentation.echos.models.AudioCaptureMethod
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun EchosRoot(
-    viewModel: EchosViewModel = viewModel()
-//            viewModel: EchosViewModel = koinViewModel()
+    viewModel: EchosViewModel = koinViewModel()
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.cslori.echojournal.R
 import com.cslori.echojournal.core.presentation.designsystem.dropdowns.Selectable
 import com.cslori.echojournal.core.util.UiText
+import com.cslori.echojournal.echos.domain.recording.VoiceRecorder
 import com.cslori.echojournal.echos.presentation.EchosEvent
 import com.cslori.echojournal.echos.presentation.echos.models.AudioCaptureMethod
 import com.cslori.echojournal.echos.presentation.echos.models.EchoFilterChip
@@ -20,9 +21,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.collections.List
 
-class EchosViewModel : ViewModel() {
+class EchosViewModel(
+    private val voiceRecorder: VoiceRecorder,
+) : ViewModel() {
     private var hasLoadedInitialData = false
 
     private val selectedMoodFilters = MutableStateFlow<List<MoodUi>>(emptyList())
@@ -55,6 +57,7 @@ class EchosViewModel : ViewModel() {
                     )
                 }
             }
+
             EchosAction.FabLongClick -> {
                 requestAudioPermission()
                 _state.update {
@@ -63,6 +66,7 @@ class EchosViewModel : ViewModel() {
                     )
                 }
             }
+
             EchosAction.MoodChipClick -> {
                 _state.update {
                     it.copy(
