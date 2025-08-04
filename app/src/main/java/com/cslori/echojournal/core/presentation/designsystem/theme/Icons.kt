@@ -9,3 +9,7 @@ import com.cslori.echojournal.R
 val Icons.Filled.Pause: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.pause)
+
+val Icons.Filled.Microphone: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.microphone)

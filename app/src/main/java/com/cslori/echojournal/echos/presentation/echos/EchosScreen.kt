@@ -1,6 +1,7 @@
 package com.cslori.echojournal.echos.presentation.echos
 
 import android.Manifest
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -15,8 +16,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cslori.echojournal.R
 import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTheme
 import com.cslori.echojournal.core.presentation.designsystem.theme.bgGradient
 import com.cslori.echojournal.core.util.ObserveAsEvents
@@ -26,8 +29,11 @@ import com.cslori.echojournal.echos.presentation.echos.components.EchoRecordFab
 import com.cslori.echojournal.echos.presentation.echos.components.EchosEmptyBackground
 import com.cslori.echojournal.echos.presentation.echos.components.EchosTopBar
 import com.cslori.echojournal.echos.presentation.echos.components.FilterRow
+import com.cslori.echojournal.echos.presentation.echos.components.RecordingSheet
 import com.cslori.echojournal.echos.presentation.echos.models.AudioCaptureMethod
+import com.cslori.echojournal.echos.presentation.echos.models.RecordingState
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 
 @Composable
@@ -46,10 +52,23 @@ fun EchosRoot(
         }
     }
 
+    val context = LocalContext.current
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
             EchosEvent.RequestAudioPermission -> {
                 permissionLauncher.launch(arrayOf(Manifest.permission.RECORD_AUDIO))
+            }
+
+            EchosEvent.DoneRecording -> {
+                Timber.d("Recording successful")
+            }
+
+            EchosEvent.RecordingTooShort -> {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.audio_recording_was_too_short),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -120,7 +139,7 @@ private fun EchosScreen(
                             onAction(EchosAction.PlayEchoClick(echoId))
                         },
                         onPauseClick = {
-                            onAction(EchosAction.PauseClick)
+                            onAction(EchosAction.PauseAudioClick)
                         },
                         onTrackSizeAvailable = { trackSize ->
                             onAction(EchosAction.TrackSizeAvailable(trackSize))
@@ -131,6 +150,21 @@ private fun EchosScreen(
                     )
                 }
             }
+        }
+
+        if (state.recordingState in listOf(
+                RecordingState.NORMAL_CAPTURE, RecordingState.PAUSED
+            )
+        ) {
+            RecordingSheet(
+                formattedRecordDuration = state.formattedRecordDuration,
+                isRecording = state.recordingState == RecordingState.NORMAL_CAPTURE,
+                onDismiss = { onAction(EchosAction.CancelRecordingClick) },
+                onPauseClick = { onAction(EchosAction.PauseRecordingClick) },
+                onResumeClick = { onAction(EchosAction.ResumeRecordingClick) },
+                onCompleteRecordingClick = { onAction(EchosAction.CompleteRecordingClick) },
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }

@@ -117,7 +117,7 @@ class AndroidVoiceRecorder(
                 delay(10L)
                 val currentTime = System.currentTimeMillis()
                 val elapsedTime = currentTime - lastTime
-                lastTime = currentTime
+
                 _recordingDetails.update {
                     it.copy(
                         duration = it.duration + elapsedTime.milliseconds,
@@ -166,7 +166,9 @@ class AndroidVoiceRecorder(
         if (!isRecording || isPaused) {
             return
         }
+        isPaused = true
         recorder?.pause()
+        durationJob?.cancel()
         amplitudeJob?.cancel()
     }
 
