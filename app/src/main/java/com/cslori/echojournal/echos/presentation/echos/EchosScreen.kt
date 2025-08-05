@@ -14,6 +14,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cslori.echojournal.R
 import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTheme
 import com.cslori.echojournal.core.presentation.designsystem.theme.bgGradient
+import com.cslori.echojournal.core.util.IsAppInForeground
 import com.cslori.echojournal.core.util.ObserveAsEvents
 import com.cslori.echojournal.echos.presentation.EchosEvent
 import com.cslori.echojournal.echos.presentation.echos.components.EchoList
@@ -70,6 +72,14 @@ fun EchosRoot(
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+    }
+
+    val isAppInForeground by IsAppInForeground()
+
+    LaunchedEffect(isAppInForeground, state.recordingState) {
+        if (!isAppInForeground && state.recordingState == RecordingState.NORMAL_CAPTURE) {
+            viewModel.onAction(EchosAction.PauseRecordingClick)
         }
     }
 
