@@ -8,7 +8,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 
 @Composable
-fun IsAppInForeground(): State<Boolean> {
+fun isAppInForeground(): State<Boolean> {
     return produceState(initialValue = true) {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {

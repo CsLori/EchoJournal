@@ -19,18 +19,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cslori.echojournal.R
 import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTheme
 import com.cslori.echojournal.core.presentation.designsystem.theme.bgGradient
-import com.cslori.echojournal.core.util.IsAppInForeground
 import com.cslori.echojournal.core.util.ObserveAsEvents
+import com.cslori.echojournal.core.util.isAppInForeground
 import com.cslori.echojournal.echos.presentation.EchosEvent
 import com.cslori.echojournal.echos.presentation.echos.components.EchoList
-import com.cslori.echojournal.echos.presentation.echos.components.EchoRecordFab
 import com.cslori.echojournal.echos.presentation.echos.components.EchosEmptyBackground
 import com.cslori.echojournal.echos.presentation.echos.components.EchosTopBar
 import com.cslori.echojournal.echos.presentation.echos.components.FilterRow
+import com.cslori.echojournal.echos.presentation.echos.components.QuickRecordFloatingActionButton
 import com.cslori.echojournal.echos.presentation.echos.components.RecordingSheet
 import com.cslori.echojournal.echos.presentation.echos.models.AudioCaptureMethod
 import com.cslori.echojournal.echos.presentation.echos.models.RecordingState
@@ -75,7 +76,7 @@ fun EchosRoot(
         }
     }
 
-    val isAppInForeground by IsAppInForeground()
+    val isAppInForeground by isAppInForeground()
 
     LaunchedEffect(isAppInForeground, state.recordingState) {
         if (!isAppInForeground && state.recordingState == RecordingState.NORMAL_CAPTURE) {
@@ -94,13 +95,34 @@ private fun EchosScreen(
     state: EchosState,
     onAction: (EchosAction) -> Unit
 ) {
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             EchosTopBar(onSettingsClick = { onAction(EchosAction.SettingsClick) })
         },
         floatingActionButton = {
-            EchoRecordFab(
-                onClick = { onAction(EchosAction.FabClick) }
+            QuickRecordFloatingActionButton(
+                onClick = { onAction(EchosAction.RecordFabClick) },
+                isQuickRecording = state.recordingState == RecordingState.QUICK_CAPTURE,
+                onLongPressStart = {
+                    val hasPermission = ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.RECORD_AUDIO
+                    ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+
+                    if(hasPermission) {
+                        onAction(EchosAction.RecordButtonLongClick)
+                    } else {
+                        onAction(EchosAction.RequestPermissionQuickRecording)
+                    }
+                },
+                onLongPressEnd = { isCancelled ->
+                    if (isCancelled) {
+                        onAction(EchosAction.CancelRecordingClick)
+                    } else {
+                        onAction(EchosAction.CompleteRecordingClick)
+                    }
+                }
             )
         }
     ) { innerPadding ->
