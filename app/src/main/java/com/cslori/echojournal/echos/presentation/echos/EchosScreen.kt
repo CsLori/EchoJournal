@@ -26,6 +26,7 @@ import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTh
 import com.cslori.echojournal.core.presentation.designsystem.theme.bgGradient
 import com.cslori.echojournal.core.util.ObserveAsEvents
 import com.cslori.echojournal.core.util.isAppInForeground
+import com.cslori.echojournal.echos.domain.recording.RecordingDetails
 import com.cslori.echojournal.echos.presentation.EchosEvent
 import com.cslori.echojournal.echos.presentation.echos.components.EchoList
 import com.cslori.echojournal.echos.presentation.echos.components.EchosEmptyBackground
@@ -36,11 +37,11 @@ import com.cslori.echojournal.echos.presentation.echos.components.RecordingSheet
 import com.cslori.echojournal.echos.presentation.echos.models.AudioCaptureMethod
 import com.cslori.echojournal.echos.presentation.echos.models.RecordingState
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 
 
 @Composable
 fun EchosRoot(
+    onNavigateToCreateEcho: (RecordingDetails) -> Unit,
     viewModel: EchosViewModel = koinViewModel()
 ) {
 
@@ -62,8 +63,8 @@ fun EchosRoot(
                 permissionLauncher.launch(arrayOf(Manifest.permission.RECORD_AUDIO))
             }
 
-            EchosEvent.DoneRecording -> {
-                Timber.d("Recording successful")
+            is EchosEvent.DoneRecording -> {
+                onNavigateToCreateEcho(event.details)
             }
 
             EchosEvent.RecordingTooShort -> {

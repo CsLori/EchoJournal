@@ -203,7 +203,7 @@ class EchosViewModel(
                 _eventChannel.send(EchosEvent.RecordingTooShort)
             } else {
                 _eventChannel.send(
-                    EchosEvent.DoneRecording
+                    EchosEvent.DoneRecording(recordingDetails)
                 )
             }
         }
