@@ -1,5 +1,6 @@
 package com.cslori.echojournal.echos.presentation.create_echo
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
@@ -29,6 +30,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -54,17 +56,21 @@ import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTh
 import com.cslori.echojournal.core.presentation.designsystem.theme.secondary70
 import com.cslori.echojournal.core.presentation.designsystem.theme.secondary95
 import com.cslori.echojournal.echos.presentation.components.MoodPlayer
+import com.cslori.echojournal.echos.presentation.create_echo.components.SelectMoodSheet
+import com.cslori.echojournal.echos.presentation.create_echo.components.TopicsRow
 import com.cslori.echojournal.echos.presentation.models.MoodUi
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CreateEchoScreenRoot(
+    onConfirmLeave: () -> Unit,
     viewModel: CreateEchoViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     CreateEchoScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = viewModel::onAction,
+        onConfirmLeave = onConfirmLeave
     )
 }
 
@@ -72,8 +78,16 @@ fun CreateEchoScreenRoot(
 @Composable
 private fun CreateEchoScreen(
     state: CreateEchoState,
-    onAction: (CreateEchoAction) -> Unit
+    onAction: (CreateEchoAction) -> Unit,
+    onConfirmLeave: () -> Unit
 ) {
+
+    BackHandler(
+        enabled = !state.showConfirmLeaveDialog
+    ) {
+        onAction(CreateEchoAction.GoBack)
+    }
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
@@ -82,7 +96,7 @@ private fun CreateEchoScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = { onAction(CreateEchoAction.NavigateBackClick) },
-                        ) {
+                    ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                             contentDescription = stringResource(R.string.navigate_back)
@@ -164,6 +178,18 @@ private fun CreateEchoScreen(
                 onTrackSizeAvailable = { onAction(CreateEchoAction.TrackSizeAvailable(it)) },
             )
 
+            TopicsRow(
+                topics = state.topics,
+                addTopicText = state.addTopicText,
+                showTopicSuggestions = state.showTopicSuggestions,
+                showCreateTopicOption = state.showCreateTopicOption,
+                searchResults = state.searchResults,
+                onAddTopicTextChange = { onAction(CreateEchoAction.TopicTextChange(it)) },
+                onRemoveTopicClick = { onAction(CreateEchoAction.RemoveTopicClick(it)) },
+                onTopicClick = { onAction(CreateEchoAction.TopicClick(it)) },
+                onDismissTopicSuggestions = { onAction(CreateEchoAction.DismissTopiSuggestions) },
+            )
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -203,7 +229,7 @@ private fun CreateEchoScreen(
             ) {
                 SecondaryButton(
                     text = stringResource(R.string.cancel),
-                    onClick = { onAction(CreateEchoAction.CreateNewTopicClick) },
+                    onClick = { onAction(CreateEchoAction.CancelClick) },
                     modifier = Modifier.fillMaxHeight(),
                 )
                 PrimaryButton(
@@ -221,7 +247,47 @@ private fun CreateEchoScreen(
                 )
             }
         }
-
+        if (state.showMoodSelector) {
+            SelectMoodSheet(
+                selectedMood = state.selectedMood,
+                onMoodClick = { onAction(CreateEchoAction.MoodClick(it)) },
+                onDismiss = { onAction(CreateEchoAction.DismissMoodSelector) },
+                onConfirmClick = { onAction(CreateEchoAction.ConfirmMood) },
+            )
+        }
+        if (state.showConfirmLeaveDialog) {
+            AlertDialog(
+                onDismissRequest = { onAction(CreateEchoAction.DismissConfirmLeaveDialog) },
+                confirmButton = {
+                    TextButton(
+                        onClick = onConfirmLeave
+                    ) {
+                        Text(
+                            text = stringResource(R.string.discard),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = { onAction(CreateEchoAction.DismissConfirmLeaveDialog) }
+                    ) {
+                        Text(
+                            text = stringResource(R.string.cancel),
+                        )
+                    }
+                },
+                title = {
+                    Text(
+                        text = stringResource(R.string.discard_recording),
+                    )
+                },
+                text = {
+                    Text(
+                        text = stringResource(R.string.this_cannot_be_undone),
+                    )
+                })
+        }
     }
 }
 
@@ -234,7 +300,8 @@ private fun CreateEchoScreenPreview() {
                 mood = MoodUi.NEUTRAL,
                 canSaveEcho = true
             ),
-            onAction = {}
+            onAction = {},
+            onConfirmLeave = {}
         )
     }
 }
