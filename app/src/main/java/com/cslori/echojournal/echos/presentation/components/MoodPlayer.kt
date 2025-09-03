@@ -15,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -24,8 +26,8 @@ import com.cslori.echojournal.core.presentation.designsystem.theme.MoodPrimary35
 import com.cslori.echojournal.core.presentation.designsystem.theme.MoodPrimary80
 import com.cslori.echojournal.core.util.formatMMSS
 import com.cslori.echojournal.echos.presentation.echos.models.PlayBackState
-import com.cslori.echojournal.echos.presentation.models.MoodUi
 import com.cslori.echojournal.echos.presentation.echos.models.TrackSizeInfo
+import com.cslori.echojournal.echos.presentation.models.MoodUi
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -64,8 +66,10 @@ fun MoodPlayer(
 
     val formattedDuration = remember(durationPlayed, totalPlaybackDuration) {
         "${durationPlayed.formatMMSS()}/${totalPlaybackDuration.formatMMSS()}"
-
     }
+
+    val density = LocalDensity.current
+
     Surface(
         shape = CircleShape,
         color = backgroundColor,
@@ -100,6 +104,17 @@ fun MoodPlayer(
                         horizontal = 8.dp
                     )
                     .fillMaxHeight()
+                    .onSizeChanged {
+                        if(it.width > 0) {
+                            onTrackSizeAvailable(
+                                TrackSizeInfo(
+                                    trackWidth = it.width.toFloat(),
+                                    barWidth = with(density) { amplitudeBarWidth.toPx() },
+                                    spacing = with(density) { amplitudeBarSpacing.toPx() }
+                                )
+                            )
+                        }
+                    }
             )
 
             Text(

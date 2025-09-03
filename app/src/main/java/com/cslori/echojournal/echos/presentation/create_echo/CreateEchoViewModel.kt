@@ -7,8 +7,11 @@ import androidx.navigation.toRoute
 import com.cslori.echojournal.app.navigation.NavigationRoute
 import com.cslori.echojournal.core.presentation.designsystem.dropdowns.Selectable.Companion.asUnselectedItems
 import com.cslori.echojournal.echos.domain.recording.RecordingStorage
+import com.cslori.echojournal.echos.presentation.echos.models.TrackSizeInfo
 import com.cslori.echojournal.echos.presentation.models.MoodUi
+import com.cslori.echojournal.echos.presentation.util.AmplitudeNormalizer
 import com.cslori.echojournal.echos.presentation.util.toRecordingDetails
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -58,7 +61,7 @@ class CreateEchoViewModel(
             is CreateEchoAction.TitleTextChange -> onTitleTextChange(action.text)
             is CreateEchoAction.TopicClick -> onTopicClick(action.topic)
             is CreateEchoAction.TopicTextChange -> onAddTopicTextChange(action.text)
-            is CreateEchoAction.TrackSizeAvailable -> {}
+            is CreateEchoAction.TrackSizeAvailable -> onTrackSizeAvailable(action.trackSizeInfo)
             CreateEchoAction.DismissConfirmLeaveDialog -> onDismissConfirmLeaveDialog()
             CreateEchoAction.CancelClick,
             CreateEchoAction.NavigateBackClick,
@@ -79,6 +82,23 @@ class CreateEchoViewModel(
             }
         }.launchIn(viewModelScope)
     }
+
+    private fun onTrackSizeAvailable(trackSizeInfo: TrackSizeInfo) {
+        viewModelScope.launch(Dispatchers.Default) {
+            val finalAmplitudes = AmplitudeNormalizer.normalize(
+                sourceAmplitudes = recordingDetails.amplitudes,
+                trackWidth = trackSizeInfo.trackWidth,
+                barWidth = trackSizeInfo.barWidth,
+                spacing = trackSizeInfo.spacing
+            )
+            _state.update {
+                it.copy(
+                    playbackAmplitudes = finalAmplitudes
+                )
+            }
+        }
+    }
+
 
     private fun onDismissConfirmLeaveDialog() {
         _state.update {
