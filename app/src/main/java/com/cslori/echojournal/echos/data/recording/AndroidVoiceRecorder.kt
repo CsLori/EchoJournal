@@ -6,6 +6,7 @@ import android.content.Context
 import android.media.MediaRecorder
 import android.os.Build
 import com.cslori.echojournal.echos.domain.recording.RecordingDetails
+import com.cslori.echojournal.echos.domain.recording.RecordingStorage
 import com.cslori.echojournal.echos.domain.recording.VoiceRecorder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,6 @@ class AndroidVoiceRecorder(
 ) : VoiceRecorder {
 
     companion object {
-        private const val TEMP_FILE_PREFIX = "temp_recording"
         private const val MAX_AMPLITUDE_VALUE = 26_000L
     }
 
@@ -132,7 +132,7 @@ class AndroidVoiceRecorder(
         val id = UUID.randomUUID().toString()
         return File(
             context.cacheDir,
-            "$TEMP_FILE_PREFIX-$id.mp4"
+            "${RecordingStorage.TEMP_FILE_PREFIX}_$id.${RecordingStorage.RECORDING_FILE_EXTENSION}"
         )
     }
 

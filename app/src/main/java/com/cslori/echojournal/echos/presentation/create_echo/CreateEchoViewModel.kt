@@ -1,9 +1,15 @@
 package com.cslori.echojournal.echos.presentation.create_echo
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
+import com.cslori.echojournal.app.navigation.NavigationRoute
 import com.cslori.echojournal.core.presentation.designsystem.dropdowns.Selectable.Companion.asUnselectedItems
+import com.cslori.echojournal.echos.domain.recording.RecordingStorage
 import com.cslori.echojournal.echos.presentation.models.MoodUi
+import com.cslori.echojournal.echos.presentation.util.toRecordingDetails
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
@@ -12,11 +18,21 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class CreateEchoViewModel : ViewModel() {
+class CreateEchoViewModel(
+    private val savedStateHandle: SavedStateHandle,
+    private val recordingStorage: RecordingStorage
+) : ViewModel() {
 
+    private val route = savedStateHandle.toRoute<NavigationRoute.CreateEcho>()
+    private val recordingDetails = route.toRecordingDetails()
+
+    private var eventChannel = Channel<CreateEchoEvent>()
+    val events = eventChannel.receiveAsFlow()
     private var hasLoadedInitialData = false
     private var _state = MutableStateFlow(CreateEchoState())
     val state = _state.onStart {
@@ -33,16 +49,16 @@ class CreateEchoViewModel : ViewModel() {
             CreateEchoAction.DismissMoodSelector -> onDismissMoodSelector()
             CreateEchoAction.DismissTopiSuggestions -> onDismissTopicSuggestions()
             is CreateEchoAction.MoodClick -> onMoodClick(action.mood)
-            is CreateEchoAction.NotesTextChange -> TODO()
-            CreateEchoAction.PauseAudioClick -> TODO()
-            CreateEchoAction.PlayAudioClick -> TODO()
+            is CreateEchoAction.NotesTextChange -> {}
+            CreateEchoAction.PauseAudioClick -> {}
+            CreateEchoAction.PlayAudioClick -> {}
             is CreateEchoAction.RemoveTopicClick -> onRemoveTopicClick(action.topic)
-            CreateEchoAction.SaveClick -> TODO()
+            CreateEchoAction.SaveClick -> onSaveClick()
             CreateEchoAction.SelectMoodClick -> onSelectMoodClick()
             is CreateEchoAction.TitleTextChange -> onTitleTextChange(action.text)
             is CreateEchoAction.TopicClick -> onTopicClick(action.topic)
             is CreateEchoAction.TopicTextChange -> onAddTopicTextChange(action.text)
-            is CreateEchoAction.TrackSizeAvailable -> TODO()
+            is CreateEchoAction.TrackSizeAvailable -> {}
             CreateEchoAction.DismissConfirmLeaveDialog -> onDismissConfirmLeaveDialog()
             CreateEchoAction.CancelClick,
             CreateEchoAction.NavigateBackClick,
@@ -71,6 +87,25 @@ class CreateEchoViewModel : ViewModel() {
             )
         }
     }
+
+    private fun onSaveClick() {
+        if (recordingDetails.filePath == null) {
+            return
+        }
+        viewModelScope.launch {
+            val savedFilePath = recordingStorage.savePersistently(
+                tempFilePath = recordingDetails.filePath
+            )
+
+            if (savedFilePath == null) {
+                eventChannel.send(CreateEchoEvent.FailedToSaveFile)
+                return@launch
+            }
+
+
+        }
+    }
+
 
     private fun onShowConfirmLeaveDialog() {
         _state.update {
@@ -109,7 +144,6 @@ class CreateEchoViewModel : ViewModel() {
         _state.update {
             it.copy(
                 titleText = text,
-                canSaveEcho = text.isNotBlank() && it.mood != null
             )
         }
     }
