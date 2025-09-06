@@ -45,7 +45,7 @@ class InternalRecordingStorage(private val context: Context) : RecordingStorage 
     }
 
     private fun generateSavedFile(): File {
-        val timeStamp = Instant.now().truncatedTo(ChronoUnit.SECONDS)
+        val timeStamp = Instant.now().truncatedTo(ChronoUnit.SECONDS).toString()
         val fileName =
             "${RecordingStorage.PERSISTENT_FILE_PREFIX}_$timeStamp.${RecordingStorage.RECORDING_FILE_EXTENSION}"
         return File(context.filesDir, fileName)

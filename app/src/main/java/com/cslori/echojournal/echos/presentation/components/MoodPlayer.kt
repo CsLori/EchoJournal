@@ -105,7 +105,7 @@ fun MoodPlayer(
                     )
                     .fillMaxHeight()
                     .onSizeChanged {
-                        if(it.width > 0) {
+                        if (it.width > 0) {
                             onTrackSizeAvailable(
                                 TrackSizeInfo(
                                     trackWidth = it.width.toFloat(),
@@ -120,6 +120,7 @@ fun MoodPlayer(
             Text(
                 text = formattedDuration,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodySmall.copy(fontFeatureSettings = "tnum"),
                 modifier = Modifier.padding(end = 8.dp)
             )
         }

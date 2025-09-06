@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
+import java.io.IOException
 import java.util.UUID
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -71,7 +72,7 @@ class AndroidVoiceRecorder(
 
             startTrackingDuration()
             startTrackingAmplitudes()
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             Timber.e(e, "Failed to start recording")
             recorder?.release()
             recorder = null

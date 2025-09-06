@@ -29,9 +29,9 @@ fun PlayBackButton(
     FilledIconButton(
         onClick = {
             when (playBackState) {
-                PlayBackState.PLAYING -> onPauseClick
+                PlayBackState.PLAYING -> onPauseClick()
                 PlayBackState.PAUSED,
-                PlayBackState.STOPPED -> onPlayClick
+                PlayBackState.STOPPED -> onPlayClick()
             }
         },
         colors = colors,
