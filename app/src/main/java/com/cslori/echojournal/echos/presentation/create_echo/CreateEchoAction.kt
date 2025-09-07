@@ -7,7 +7,7 @@ sealed interface CreateEchoAction {
     data object NavigateBackClick : CreateEchoAction
     data class TitleTextChange(val text: String) : CreateEchoAction
     data class TopicTextChange(val text: String) : CreateEchoAction
-    data class NotesTextChange(val text: String) : CreateEchoAction
+    data class NoteTextChange(val text: String) : CreateEchoAction
     data object SelectMoodClick : CreateEchoAction
     data object DismissMoodSelector : CreateEchoAction
     data class MoodClick(val mood: MoodUi) : CreateEchoAction

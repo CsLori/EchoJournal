@@ -219,7 +219,7 @@ private fun CreateEchoScreen(
 
                 TransparentHintTextField(
                     text = state.noteText,
-                    onValueChange = { onAction(CreateEchoAction.NotesTextChange(it)) },
+                    onValueChange = { onAction(CreateEchoAction.NoteTextChange(it)) },
                     modifier = Modifier
                         .weight(1f)
                         .focusRequester(descriptionFocusRequester),
