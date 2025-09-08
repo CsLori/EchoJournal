@@ -3,6 +3,7 @@ package com.cslori.echojournal.app
 import android.app.Application
 import com.cslori.echojournal.BuildConfig
 import com.cslori.echojournal.app.di.appModule
+import com.cslori.echojournal.core.database.di.databaseModule
 import com.cslori.echojournal.echos.di.echoModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +27,8 @@ class EchoJournalApp : Application() {
             modules(
                 listOf(
                     appModule,
-                    echoModule
+                    echoModule,
+                    databaseModule
                 )
             )
         }
