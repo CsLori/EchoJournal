@@ -63,7 +63,6 @@ import com.cslori.echojournal.echos.presentation.create_echo.components.SelectMo
 import com.cslori.echojournal.echos.presentation.create_echo.components.TopicsRow
 import com.cslori.echojournal.echos.presentation.models.MoodUi
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 
 @Composable
 fun CreateEchoScreenRoot(
@@ -84,7 +83,6 @@ fun CreateEchoScreenRoot(
             }
 
             CreateEchoEvent.EchoSuccessfullySaved -> {
-                Timber.d("Echo successfully saved")
                 onConfirmLeave()
             }
         }
