@@ -25,7 +25,7 @@ fun NavigationRoot(navController: NavHostController) {
         }
         composable<NavigationRoute.CreateEcho> {
             CreateEchoScreenRoot(
-                onConfirmLeave = { navController::navigateUp }
+                onConfirmLeave = navController::navigateUp
             )
         }
     }

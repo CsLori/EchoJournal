@@ -122,7 +122,7 @@ fun TopicsRow(
             SelectableOptionsDropDownMenu(
                 items = searchResults,
                 onDismiss = onDismissTopicSuggestions,
-                onItemClick = { onTopicClick },
+                onItemClick = { onTopicClick(it.item) },
                 modifier = Modifier.padding(start = 8.dp),
                 key = { it },
                 leadingIcon = {

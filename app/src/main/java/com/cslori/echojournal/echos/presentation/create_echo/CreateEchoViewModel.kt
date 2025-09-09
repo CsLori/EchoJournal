@@ -7,6 +7,9 @@ import androidx.navigation.toRoute
 import com.cslori.echojournal.app.navigation.NavigationRoute
 import com.cslori.echojournal.core.presentation.designsystem.dropdowns.Selectable.Companion.asUnselectedItems
 import com.cslori.echojournal.echos.domain.audio.AudioPlayer
+import com.cslori.echojournal.echos.domain.echo.Echo
+import com.cslori.echojournal.echos.domain.echo.EchoDataSource
+import com.cslori.echojournal.echos.domain.echo.Mood
 import com.cslori.echojournal.echos.domain.recording.RecordingStorage
 import com.cslori.echojournal.echos.presentation.echos.models.PlayBackState
 import com.cslori.echojournal.echos.presentation.echos.models.TrackSizeInfo
@@ -14,6 +17,7 @@ import com.cslori.echojournal.echos.presentation.models.MoodUi
 import com.cslori.echojournal.echos.presentation.util.AmplitudeNormalizer
 import com.cslori.echojournal.echos.presentation.util.toRecordingDetails
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,12 +34,14 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.Instant
 import kotlin.time.Duration
 
 class CreateEchoViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val recordingStorage: RecordingStorage,
-    private val audioPlayer: AudioPlayer
+    private val audioPlayer: AudioPlayer,
+    private val echoDataSource: EchoDataSource
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<NavigationRoute.CreateEcho>()
@@ -131,6 +137,7 @@ class CreateEchoViewModel(
         }
     }
 
+    @OptIn(FlowPreview::class)
     private fun observeAddTopicText() {
         state.map { it.addTopicText }.distinctUntilChanged().debounce(300).onEach { query ->
             _state.update {
@@ -171,7 +178,7 @@ class CreateEchoViewModel(
     }
 
     private fun onSaveClick() {
-        if (recordingDetails.filePath == null) {
+        if (recordingDetails.filePath == null || !state.value.canSaveEcho) {
             return
         }
         viewModelScope.launch {
@@ -183,8 +190,20 @@ class CreateEchoViewModel(
                 eventChannel.send(CreateEchoEvent.FailedToSaveFile)
                 return@launch
             }
-
-
+            val currentState = state.value
+            val echo = Echo(
+                mood = currentState.mood?.let { Mood.valueOf(it.name) }
+                    ?: throw java.lang.IllegalStateException("Mood must be set before saving Echo"),
+                title = currentState.titleText.trim(),
+                note = currentState.noteText.ifBlank { null },
+                topics = currentState.topics,
+                audioFilePath = savedFilePath,
+                audioPlaybackLength = currentState.playbackTotalDuration,
+                audioAmplitudes = recordingDetails.amplitudes,
+                recordedAt = Instant.now()
+            )
+            echoDataSource.insertEcho(echo)
+            eventChannel.send(CreateEchoEvent.EchoSuccessfullySaved)
         }
     }
 
@@ -234,8 +253,8 @@ class CreateEchoViewModel(
     private fun onAddTopicTextChange(text: String) {
         _state.update {
             it.copy(
-                addTopicText = text.filter {
-                    it.isLetterOrDigit()
+                addTopicText = text.filter { char ->
+                    char.isLetterOrDigit()
                 },
             )
         }
