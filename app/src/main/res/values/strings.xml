@@ -56,4 +56,6 @@
     <string name="discard_recording">Discard recording?</string>
     <string name="this_cannot_be_undone">This cannot be undone!</string>
     <string name="failed_to_save_file">Failed to save file.</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
 </resources>

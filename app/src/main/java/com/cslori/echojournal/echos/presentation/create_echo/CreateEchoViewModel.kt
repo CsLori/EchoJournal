@@ -11,7 +11,7 @@ import com.cslori.echojournal.echos.domain.echo.Echo
 import com.cslori.echojournal.echos.domain.echo.EchoDataSource
 import com.cslori.echojournal.echos.domain.echo.Mood
 import com.cslori.echojournal.echos.domain.recording.RecordingStorage
-import com.cslori.echojournal.echos.presentation.echos.models.PlayBackState
+import com.cslori.echojournal.echos.presentation.echos.models.PlaybackState
 import com.cslori.echojournal.echos.presentation.echos.models.TrackSizeInfo
 import com.cslori.echojournal.echos.presentation.models.MoodUi
 import com.cslori.echojournal.echos.presentation.util.AmplitudeNormalizer
@@ -111,7 +111,7 @@ class CreateEchoViewModel(
     }
 
     private fun onPlayAudioClick() {
-        if (state.value.playBackState == PlayBackState.PAUSED) {
+        if (state.value.playBackState == PlaybackState.PAUSED) {
             audioPlayer.resume()
         } else {
             Timber.d("DDD - play pressed")
@@ -120,7 +120,7 @@ class CreateEchoViewModel(
                 onComplete = {
                     _state.update {
                         it.copy(
-                            playBackState = PlayBackState.STOPPED,
+                            playBackState = PlaybackState.STOPPED,
                             durationPlayed = Duration.ZERO
                         )
                     }
@@ -129,7 +129,7 @@ class CreateEchoViewModel(
             durationJob = audioPlayer.activeTrack.filterNotNull().onEach { track ->
                 _state.update {
                     it.copy(
-                        playBackState = if (track.isPlaying) PlayBackState.PLAYING else PlayBackState.PAUSED,
+                        playBackState = if (track.isPlaying) PlaybackState.PLAYING else PlaybackState.PAUSED,
                         durationPlayed = track.durationPlayed
                     )
                 }

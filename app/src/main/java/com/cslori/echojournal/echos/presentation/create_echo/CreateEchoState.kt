@@ -1,7 +1,7 @@
 package com.cslori.echojournal.echos.presentation.create_echo
 
 import com.cslori.echojournal.core.presentation.designsystem.dropdowns.Selectable
-import com.cslori.echojournal.echos.presentation.echos.models.PlayBackState
+import com.cslori.echojournal.echos.presentation.echos.models.PlaybackState
 import com.cslori.echojournal.echos.presentation.models.MoodUi
 import kotlin.time.Duration
 
@@ -19,7 +19,7 @@ data class CreateEchoState(
     val canSaveEcho: Boolean = false,
     val playbackAmplitudes: List<Float> = emptyList(),
     val playbackTotalDuration: Duration = Duration.ZERO,
-    val playBackState: PlayBackState = PlayBackState.STOPPED,
+    val playBackState: PlaybackState = PlaybackState.STOPPED,
     val durationPlayed: Duration = Duration.ZERO,
     val showConfirmLeaveDialog: Boolean = false,
 ) {

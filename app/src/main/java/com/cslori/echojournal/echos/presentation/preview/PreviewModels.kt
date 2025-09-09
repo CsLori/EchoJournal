@@ -1,6 +1,6 @@
 package com.cslori.echojournal.echos.presentation.preview
 
-import com.cslori.echojournal.echos.presentation.echos.models.PlayBackState
+import com.cslori.echojournal.echos.presentation.echos.models.PlaybackState
 import com.cslori.echojournal.echos.presentation.models.EchoUi
 import com.cslori.echojournal.echos.presentation.models.MoodUi
 import java.time.Instant
@@ -19,7 +19,7 @@ data object PreviewModels {
         amplitudes = (1..30).map { Random.nextFloat() },
         playbackTotalDuration = 250.seconds,
         playbackCurrentDuration = 120.seconds,
-        playbackState = PlayBackState.PAUSED,
+        playbackState = PlaybackState.PAUSED,
         audioFilePath = ""
     )
 }

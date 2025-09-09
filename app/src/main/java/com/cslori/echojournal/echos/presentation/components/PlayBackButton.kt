@@ -15,12 +15,12 @@ import com.cslori.echojournal.R
 import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTheme
 import com.cslori.echojournal.core.presentation.designsystem.theme.Pause
 import com.cslori.echojournal.core.util.defaultShadow
-import com.cslori.echojournal.echos.presentation.echos.models.PlayBackState
+import com.cslori.echojournal.echos.presentation.echos.models.PlaybackState
 import com.cslori.echojournal.echos.presentation.models.MoodUi
 
 @Composable
 fun PlayBackButton(
-    playBackState: PlayBackState,
+    playBackState: PlaybackState,
     onPlayClick: () -> Unit,
     onPauseClick: () -> Unit,
     colors: IconButtonColors,
@@ -29,9 +29,9 @@ fun PlayBackButton(
     FilledIconButton(
         onClick = {
             when (playBackState) {
-                PlayBackState.PLAYING -> onPauseClick()
-                PlayBackState.PAUSED,
-                PlayBackState.STOPPED -> onPlayClick()
+                PlaybackState.PLAYING -> onPauseClick()
+                PlaybackState.PAUSED,
+                PlaybackState.STOPPED -> onPlayClick()
             }
         },
         colors = colors,
@@ -39,14 +39,14 @@ fun PlayBackButton(
     ) {
         Icon(
             imageVector = when (playBackState) {
-                PlayBackState.PLAYING -> Icons.Filled.Pause
-                PlayBackState.PAUSED,
-                PlayBackState.STOPPED -> Icons.Filled.PlayArrow
+                PlaybackState.PLAYING -> Icons.Filled.Pause
+                PlaybackState.PAUSED,
+                PlaybackState.STOPPED -> Icons.Filled.PlayArrow
             },
             contentDescription = when (playBackState) {
-                PlayBackState.PLAYING -> stringResource(id = R.string.playing)
-                PlayBackState.PAUSED -> stringResource(id = R.string.paused)
-                PlayBackState.STOPPED -> stringResource(id = R.string.stopped)
+                PlaybackState.PLAYING -> stringResource(id = R.string.playing)
+                PlaybackState.PAUSED -> stringResource(id = R.string.paused)
+                PlaybackState.STOPPED -> stringResource(id = R.string.stopped)
             }
         )
     }
@@ -58,7 +58,7 @@ fun PlayBackButton(
 private fun PlayBackButtonPreview() {
     EchoJournalTheme {
         PlayBackButton(
-            playBackState = PlayBackState.PLAYING,
+            playBackState = PlaybackState.PLAYING,
             onPlayClick = {},
             onPauseClick = {},
             colors = IconButtonDefaults.filledIconButtonColors(

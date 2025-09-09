@@ -25,7 +25,7 @@ import com.cslori.echojournal.core.presentation.designsystem.theme.MoodPrimary25
 import com.cslori.echojournal.core.presentation.designsystem.theme.MoodPrimary35
 import com.cslori.echojournal.core.presentation.designsystem.theme.MoodPrimary80
 import com.cslori.echojournal.core.util.formatMMSS
-import com.cslori.echojournal.echos.presentation.echos.models.PlayBackState
+import com.cslori.echojournal.echos.presentation.echos.models.PlaybackState
 import com.cslori.echojournal.echos.presentation.echos.models.TrackSizeInfo
 import com.cslori.echojournal.echos.presentation.models.MoodUi
 import kotlin.random.Random
@@ -35,7 +35,7 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun MoodPlayer(
     moodUi: MoodUi?,
-    playBackState: PlayBackState,
+    playBackState: PlaybackState,
     playerProgress: () -> Float,
     durationPlayed: Duration,
     totalPlaybackDuration: Duration,
@@ -139,7 +139,7 @@ private fun MoodPlayerPreview() {
     EchoJournalTheme {
         MoodPlayer(
             moodUi = MoodUi.NEUTRAL,
-            playBackState = PlayBackState.PLAYING,
+            playBackState = PlaybackState.PLAYING,
             playerProgress = { 0.34f },
             durationPlayed = 120.seconds,
             totalPlaybackDuration = 250.seconds,
