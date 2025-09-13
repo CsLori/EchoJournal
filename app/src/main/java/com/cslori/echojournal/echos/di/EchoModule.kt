@@ -10,6 +10,7 @@ import com.cslori.echojournal.echos.domain.recording.RecordingStorage
 import com.cslori.echojournal.echos.domain.recording.VoiceRecorder
 import com.cslori.echojournal.echos.presentation.create_echo.CreateEchoViewModel
 import com.cslori.echojournal.echos.presentation.echos.EchosViewModel
+import com.cslori.echojournal.echos.presentation.settings.SettingsViewModel
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
@@ -23,4 +24,5 @@ val echoModule = module {
 
     viewModelOf(::EchosViewModel)
     viewModelOf(::CreateEchoViewModel)
+    viewModelOf(::SettingsViewModel)
 }

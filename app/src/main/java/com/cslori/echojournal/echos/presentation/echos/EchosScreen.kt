@@ -42,6 +42,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun EchosRoot(
     onNavigateToCreateEcho: (RecordingDetails) -> Unit,
+    onNavigateToSettings: () -> Unit,
     viewModel: EchosViewModel = koinViewModel()
 ) {
 
@@ -87,7 +88,13 @@ fun EchosRoot(
 
     EchosScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when (action) {
+                EchosAction.SettingsClick -> onNavigateToSettings()
+                else -> Unit
+            }
+            viewModel::onAction
+        }
     )
 }
 
@@ -111,7 +118,7 @@ private fun EchosScreen(
                         Manifest.permission.RECORD_AUDIO
                     ) == android.content.pm.PackageManager.PERMISSION_GRANTED
 
-                    if(hasPermission) {
+                    if (hasPermission) {
                         onAction(EchosAction.RecordButtonLongClick)
                     } else {
                         onAction(EchosAction.RequestPermissionQuickRecording)

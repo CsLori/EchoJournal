@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.cslori.echojournal.echos.presentation.create_echo.CreateEchoScreenRoot
 import com.cslori.echojournal.echos.presentation.echos.EchosRoot
+import com.cslori.echojournal.echos.presentation.settings.SettingsRoot
 import com.cslori.echojournal.echos.presentation.util.toCreateEchoRoute
 
 @Composable
@@ -21,11 +22,20 @@ fun NavigationRoot(navController: NavHostController) {
                         recordingDetails.toCreateEchoRoute()
                     )
                 }
+                , onNavigateToSettings = {
+                    navController.navigate(NavigationRoute.Settings)
+                }
             )
         }
         composable<NavigationRoute.CreateEcho> {
             CreateEchoScreenRoot(
                 onConfirmLeave = navController::navigateUp
+            )
+        }
+
+        composable<NavigationRoute.Settings> {
+            SettingsRoot(
+                onGoBack = navController::navigateUp
             )
         }
     }

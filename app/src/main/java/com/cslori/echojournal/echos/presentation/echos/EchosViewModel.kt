@@ -94,9 +94,9 @@ class EchosViewModel(
                     echo.copy(
                         audioAmplitudes = AmplitudeNormalizer.normalize(
                             sourceAmplitudes = echo.audioAmplitudes,
-                            trackWidth = trackSizeInfo?.trackWidth ?: 0f,
-                            barWidth = trackSizeInfo?.barWidth ?: 0f,
-                            spacing = trackSizeInfo?.spacing ?: 0f
+                            trackWidth = trackSizeInfo.trackWidth,
+                            barWidth = trackSizeInfo.barWidth,
+                            spacing = trackSizeInfo.spacing
                         )
                     )
                 }
@@ -449,8 +449,8 @@ class EchosViewModel(
         return combine(
             this, selectedTopicFilters, selectedMoodFilters
         ) {
-            echoes, topicFilters, moodFilters->
-                echoes.filter { echo ->
+            echos, topicFilters, moodFilters->
+                echos.filter { echo ->
                     val matchesMoodFilter = moodFilters
                         .takeIf { it.isNotEmpty() }
                         ?.any { it.name == echo.mood.name }
