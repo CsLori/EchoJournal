@@ -93,7 +93,7 @@ fun EchosRoot(
                 EchosAction.SettingsClick -> onNavigateToSettings()
                 else -> Unit
             }
-            viewModel::onAction
+            viewModel.onAction(action)
         }
     )
 }

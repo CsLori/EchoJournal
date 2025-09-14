@@ -33,7 +33,7 @@ class DataSoreSettings(private val context: Context) : SettingsPreferences {
 
     override suspend fun saveDefaultMood(mood: Mood) {
         context.settingsDataStore.edit { prefs ->
-            prefs[topicsKey] = moodKey.name
+            prefs[moodKey] = mood.name
         }
     }
 

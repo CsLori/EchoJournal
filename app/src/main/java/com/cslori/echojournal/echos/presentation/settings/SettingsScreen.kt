@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cslori.echojournal.R
 import com.cslori.echojournal.core.presentation.designsystem.theme.EchoJournalTheme
 import com.cslori.echojournal.core.presentation.designsystem.theme.bgGradient
+import com.cslori.echojournal.echos.presentation.settings.components.MoodCard
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -43,7 +44,7 @@ fun SettingsRoot(
                 is SettingsAction.BackClick -> onGoBack()
                 else -> Unit
             }
-            viewModel::onAction
+            viewModel.onAction(action)
         }
     )
 }
@@ -91,7 +92,10 @@ private fun SettingsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-
+            MoodCard(
+                selectedMood = state.selectedMood,
+                onMoodClicked = { onAction(SettingsAction.MoodClick(it)) }
+            )
         }
     }
 }
