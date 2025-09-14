@@ -1,0 +1,47 @@
+package com.cslori.echojournal.echos.data.settings
+
+import android.content.Context
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import com.cslori.echojournal.echos.domain.echo.Mood
+import com.cslori.echojournal.echos.domain.settings.SettingsPreferences
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+
+class DataSoreSettings(private val context: Context) : SettingsPreferences {
+
+    companion object {
+        private val Context.settingsDataStore by preferencesDataStore(name = "settings_datastore")
+    }
+
+    private val topicsKey = stringPreferencesKey("topics")
+    private val moodKey = stringPreferencesKey("mood")
+
+    override suspend fun saveDefaultTopics(topics: List<String>) {
+        context.settingsDataStore.edit { prefs ->
+            prefs[topicsKey] = topics.toSet().joinToString()
+        }
+    }
+
+    override fun observeDefaultTopics(): Flow<List<String>> {
+        return context.settingsDataStore.data.map { prefs ->
+            prefs[topicsKey]?.split(",") ?: emptyList()
+        }.distinctUntilChanged()
+    }
+
+    override suspend fun saveDefaultMood(mood: Mood) {
+        context.settingsDataStore.edit { prefs ->
+            prefs[topicsKey] = moodKey.name
+        }
+    }
+
+    override fun observeDefaultMood(): Flow<Mood> {
+        return context.settingsDataStore.data.map { prefs ->
+            prefs[moodKey]?.let {
+                Mood.valueOf(it)
+            } ?: Mood.NEUTRAL
+        }.distinctUntilChanged()
+    }
+}
