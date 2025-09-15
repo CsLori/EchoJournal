@@ -17,6 +17,9 @@ koin = "4.0.0"
 navigationCompose = "2.8.9"
 kotlinSerialization = "1.8.1"
 timber = "5.0.1"
+mockk = "1.13.14"
+turbine = "1.0.0"
+coroutinesTest = "1.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,6 +55,9 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTest" }
 
 [bundles]
 widget-glance = ["androidx-glance-appwidget", "androidx-glance-material3"]
