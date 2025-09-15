@@ -58,4 +58,6 @@
     <string name="failed_to_save_file">Failed to save file.</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
+    <string name="record_new_echo">Record new echo</string>
+    <string name="record_a_new_echo">Record a new echo</string>
 </resources>

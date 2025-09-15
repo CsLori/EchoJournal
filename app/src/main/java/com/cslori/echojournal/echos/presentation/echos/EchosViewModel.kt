@@ -1,5 +1,6 @@
 package com.cslori.echojournal.echos.presentation.echos
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cslori.echojournal.R
@@ -45,7 +46,8 @@ import kotlin.time.Duration.Companion.seconds
 class EchosViewModel(
     private val voiceRecorder: VoiceRecorder,
     private val audioPlayer: AudioPlayer,
-    private val echoDataSource: EchoDataSource
+    private val echoDataSource: EchoDataSource,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     companion object {
@@ -68,6 +70,7 @@ class EchosViewModel(
             if (!hasLoadedInitialData) {
                 observeFilters()
                 observeEchos()
+                fetchNavigationArgs()
                 hasLoadedInitialData = true
             }
         }.stateIn(
@@ -182,6 +185,15 @@ class EchosViewModel(
             EchosAction.CancelRecordingClick -> cancelRecording()
             EchosAction.CompleteRecordingClick -> stopRecording()
             EchosAction.ResumeRecordingClick -> resumeRecording()
+        }
+    }
+
+
+    private fun fetchNavigationArgs() {
+        val startRecording = savedStateHandle.get<Boolean>("startRecording") ?: false
+        if (startRecording) {
+            _state.update { it.copy(currentCaptureMethod = AudioCaptureMethod.STANDARD) }
+            requestAudioPermission()
         }
     }
 
@@ -448,21 +460,20 @@ class EchosViewModel(
     private fun Flow<List<Echo>>.filterByMoodAndTopics(): Flow<List<Echo>> {
         return combine(
             this, selectedTopicFilters, selectedMoodFilters
-        ) {
-            echos, topicFilters, moodFilters->
-                echos.filter { echo ->
-                    val matchesMoodFilter = moodFilters
-                        .takeIf { it.isNotEmpty() }
-                        ?.any { it.name == echo.mood.name }
-                        ?: true
+        ) { echos, topicFilters, moodFilters ->
+            echos.filter { echo ->
+                val matchesMoodFilter = moodFilters
+                    .takeIf { it.isNotEmpty() }
+                    ?.any { it.name == echo.mood.name }
+                    ?: true
 
-                    val matchesTopicFilter = topicFilters
-                        .takeIf { it.isNotEmpty() }
-                        ?.any { it in echo.topics }
-                        ?: true
+                val matchesTopicFilter = topicFilters
+                    .takeIf { it.isNotEmpty() }
+                    ?.any { it in echo.topics }
+                    ?: true
 
-                    matchesMoodFilter && matchesTopicFilter
-                }
+                matchesMoodFilter && matchesTopicFilter
+            }
         }
     }
 }
