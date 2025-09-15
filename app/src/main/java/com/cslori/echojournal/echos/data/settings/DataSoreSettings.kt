@@ -27,7 +27,7 @@ class DataSoreSettings(private val context: Context) : SettingsPreferences {
 
     override fun observeDefaultTopics(): Flow<List<String>> {
         return context.settingsDataStore.data.map { prefs ->
-            prefs[topicsKey]?.split(",") ?: emptyList()
+            prefs[topicsKey]?.split(",")?.filter { it.isNotBlank() } ?: emptyList()
         }.distinctUntilChanged()
     }
 
