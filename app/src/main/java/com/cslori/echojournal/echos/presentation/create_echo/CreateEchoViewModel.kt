@@ -39,7 +39,7 @@ import timber.log.Timber
 import java.time.Instant
 import kotlin.time.Duration
 
-class CreateEchoViewModel(
+open class CreateEchoViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val recordingStorage: RecordingStorage,
     private val audioPlayer: AudioPlayer,

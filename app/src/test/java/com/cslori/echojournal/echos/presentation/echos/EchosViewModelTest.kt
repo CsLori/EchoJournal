@@ -152,9 +152,8 @@ class EchosViewModelTest {
     @Test
     fun `audio permission denied should handle gracefully`() = runTest {
         viewModel.state.test {
-            skipItems(1) // Skip initial state
+            skipItems(1)
 
-            // Trigger record action which requests permission
             viewModel.onAction(EchosAction.RecordFabClick)
 
             // Should set capture method but not start recording yet
